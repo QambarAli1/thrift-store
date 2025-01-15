@@ -33,7 +33,16 @@ app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
 });
 
+const __dirname1 = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname1 + "/uploads")));
+
+// Serve the frontend
 const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+// Catch-all route to serve index.html for all non-API routes
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
+);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
